@@ -1,0 +1,71 @@
+name: OpenCLRaw
+version: 1.0.1001
+cabal-version: >=1.2
+build-type: Simple
+license: BSD3
+license-file: LICENSE
+copyright: Renaissance Computing Institute
+maintainer: J.R. Heard
+build-depends: base <= 4.1.0.0, bytestring -any, mtl -any
+stability: Experimental
+homepage: http://vis.renci.org/jeff/opencl
+package-url:
+bug-reports:
+synopsis: The OpenCL Standard for heterogenous data-parallel computing
+description: The OpenCL system for open heterogenous data parallel supercomputing.
+
+ **General Notes on the differences between Haskell and the OpenCL-C implementation**
+
+    * Side-effectful procedures capable of returning an error code only return a Maybe ErrorCode, with Nothing returned upon success
+    
+    * Procedures which follow the pattern of returning a pointer to an object and taking a final parameter as an error code instead return Either ErrorCode ObjectType
+    
+    * Procedures which prefix with clGetInfo* merely take the object, parameter name, and parameter size to allocate. The allocation handled by OpenCLRaw and returned as a Haskell-managed ForeignPtr ()
+    
+    * Enumerations and constants are replaced by newtypes for the sake of type-safety.  
+
+category: Graphics
+author: J.R. Heard
+tested-with:
+data-files:
+data-dir: ""
+extra-source-files: 
+extra-tmp-files:
+exposed-modules: System.OpenCL.Raw.V10.CommandQueue
+                 System.OpenCL.Raw.V10.Context
+                 System.OpenCL.Raw.V10.DeviceInfo
+                 System.OpenCL.Raw.V10.Errors
+                 System.OpenCL.Raw.V10.Etc
+                 System.OpenCL.Raw.V10.EventObject
+                 System.OpenCL.Raw.V10.FlushFinish
+                 System.OpenCL.Raw.V10.Kernel
+                 System.OpenCL.Raw.V10.MemoryObject
+                 System.OpenCL.Raw.V10.OutOfOrder
+                 System.OpenCL.Raw.V10.PlatformInfo
+                 System.OpenCL.Raw.V10.ProgramObject
+                 System.OpenCL.Raw.V10.Sampler
+                 System.OpenCL.Raw.V10.Types
+                 System.OpenCL.Raw.V10
+exposed: True
+buildable: True
+build-tools:
+cpp-options:
+cc-options:
+ld-options:
+pkgconfig-depends:
+frameworks:
+c-sources:
+extensions:
+extra-libraries:
+extra-lib-dirs:
+includes:
+install-includes:
+include-dirs:
+hs-source-dirs: .
+other-modules: System.OpenCL.Raw.V10.Utils
+ghc-prof-options:
+ghc-shared-options:
+ghc-options:
+hugs-options:
+nhc98-options:
+jhc-options:
