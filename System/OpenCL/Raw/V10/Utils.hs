@@ -24,7 +24,7 @@ wrapGetInfo :: (CLsizei -> Ptr () -> Ptr CLsizei -> IO CLint) -> CLsizei -> IO (
 wrapGetInfo raw_infoFn param_size = alloca $ \value_size_ret -> do
     param_data <- (mallocForeignPtrBytes . fromIntegral $ param_size) :: IO (ForeignPtr ())
     ret <- wrapError $ withForeignPtr param_data $ \param_dataP -> raw_infoFn param_size param_dataP value_size_ret
-    if ret == Just clSuccess
+    if ret == Nothing
         then peek value_size_ret >>= \valsz -> return . Right $ (param_data,valsz)
         else return . Left $ fromJust ret        
 
