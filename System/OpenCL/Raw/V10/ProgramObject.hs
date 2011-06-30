@@ -6,6 +6,7 @@ module System.OpenCL.Raw.V10.ProgramObject
     ,clRetainProgram
     ,clReleaseProgram
     ,clBuildProgram
+    ,BuildProgramCallback 
     ,clUnloadCompiler
     ,clGetProgramInfo
     ,clGetProgramBuildInfo)
