@@ -67,7 +67,9 @@ clEnqueueNDRangeKernel queue kernel global_work_sizeL local_work_sizeL event_wai
         pokeArray global_work_size global_work_sizeL
         pokeArray local_work_size local_work_sizeL
         pokeArray event_wait_list event_wait_listL
-        err <- wrapError $ raw_clEnqueueNDRangeKernel queue kernel (fromIntegral work_dim) nullPtr global_work_size local_work_size (fromIntegral num_events_in_wait_list) event_wait_list event
+        err <- if num_events_in_wait_list > 0 
+               then wrapError $ raw_clEnqueueNDRangeKernel queue kernel (fromIntegral work_dim) nullPtr global_work_size local_work_size (fromIntegral num_events_in_wait_list) event_wait_list event
+               else wrapError $ raw_clEnqueueNDRangeKernel queue kernel (fromIntegral work_dim) nullPtr global_work_size local_work_size (fromIntegral num_events_in_wait_list) nullPtr_list event
         if err == Nothing
             then Right <$> peek event
             else return $ Left . fromJust $ err
