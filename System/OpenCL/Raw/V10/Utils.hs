@@ -31,7 +31,7 @@ wrapGetInfo raw_infoFn param_size = alloca $ \value_size_ret -> do
 
 
 nest :: [(r -> a) -> a] -> ([r] -> a) -> a
-nest xs = runCont (sequence (map Cont xs))
+nest xs = runCont (sequence (map cont xs))
 
 withCStringArray0 :: [String] -> (Ptr CString -> IO a) -> IO a
 withCStringArray0 strings act = nest (map withCString strings)
