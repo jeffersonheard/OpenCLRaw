@@ -1,8 +1,11 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {-| Declaration of types, bounds and constants for OpenCL 1.0 -}
 module System.OpenCL.Raw.V10.Types where
 
 import Foreign.C.Types
 import Foreign
+import Control.Exception
+import Data.Typeable
 
 data PlatformIDc = PlatformIDc
 data DeviceIDc = DeviceIDc
@@ -42,7 +45,8 @@ newtype DeviceType = DeviceType CLbitfield
 newtype ContextInfo = ContextInfo CLuint
 newtype CommandQueueProperties = CommandQueueProperties CLbitfield
 newtype CommandQueueInfo = CommandQueueInfo CLuint
-newtype ErrorCode = ErrorCode CLint deriving (Eq,Ord,Show,Read)
+newtype ErrorCode = ErrorCode CLint deriving (Eq,Ord,Show,Read,Typeable)
+instance Exception ErrorCode
 newtype EventInfo = EventInfo CLuint
 newtype ProfilingInfo = ProfilingInfo CLuint
 newtype KernelInfo = KernelInfo CLuint

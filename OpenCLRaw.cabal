@@ -65,7 +65,7 @@ hs-source-dirs: .
 other-modules: System.OpenCL.Raw.V10.Utils
 ghc-prof-options:
 ghc-shared-options:
-ghc-options:
+ghc-options: -Wall
 hugs-options:
 nhc98-options:
 jhc-options:

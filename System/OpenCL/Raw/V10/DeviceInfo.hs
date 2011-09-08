@@ -11,18 +11,17 @@ import System.OpenCL.Raw.V10.Utils
 import Foreign
 import Control.Applicative
 import Data.Bits
+import Control.Exception ( throw )
 
 
 foreign import ccall "clGetDeviceIDs" raw_clGetDeviceIDs :: PlatformID -> CLbitfield -> CLuint -> Ptr DeviceID -> Ptr CLuint -> IO CLint
-clGetDeviceIDs :: PlatformID -> DeviceType -> CLuint -> IO (Either ErrorCode [DeviceID])
-clGetDeviceIDs platform (DeviceType device_type) num_entries = alloca $ \(devices::Ptr DeviceID) -> alloca $ \(num_devices::Ptr CLuint) -> do
+clGetDeviceIDs :: PlatformID -> DeviceType -> CLuint -> IO [DeviceID]
+clGetDeviceIDs platform (DeviceType device_type) num_entries = alloca $ \devices -> alloca $ \num_devices -> do
   errcode <- ErrorCode <$> raw_clGetDeviceIDs platform device_type num_entries devices num_devices
   if errcode == clSuccess
-      then Right <$> (peek num_devices >>= \num_devicesN -> peekArray (fromIntegral num_devicesN) devices)
-      else return $ Left errcode
-      
+    then peek num_devices >>= \num_devicesN -> peekArray (fromIntegral num_devicesN) devices
+    else throw errcode
+
 foreign import ccall "clGetDeviceInfo" raw_clGetDeviceInfo :: DeviceID -> CLuint -> CLsizei -> Ptr () -> Ptr CLsizei -> IO CLint
-clGetDeviceInfo :: DeviceID -> DeviceInfo -> CLsizei -> IO (Either ErrorCode (ForeignPtr (), CLsizei))
+clGetDeviceInfo :: DeviceID -> DeviceInfo -> CLsizei -> IO (ForeignPtr (), CLsizei)
 clGetDeviceInfo obj (DeviceInfo param_name) param_size = wrapGetInfo (raw_clGetDeviceInfo obj param_name) param_size
-
-

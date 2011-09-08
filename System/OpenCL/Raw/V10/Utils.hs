@@ -8,27 +8,35 @@ import System.OpenCL.Raw.V10.Types
 import Control.Applicative
 import Data.Maybe
 import Control.Monad.Cont
+import Control.Exception ( throw )
 
-wrapError :: IO CLint -> IO (Maybe ErrorCode)
-wrapError thunk = thunk >>= \errcode -> if ErrorCode errcode == clSuccess then return Nothing else return . Just . ErrorCode $ errcode
+wrapError :: Integral a => IO a -> IO ()
+wrapError thunk = do
+  err <- (ErrorCode . fromIntegral) <$> thunk
+  if err == clSuccess
+    then return ()
+    else throw err
 
-wrapErrorEither :: (Ptr CLint -> IO a) -> IO (Either ErrorCode a)
-wrapErrorEither thunk = alloca $ \errorP -> do
-    ret <- thunk errorP
-    err <- ErrorCode <$> peek errorP
-    if err == clSuccess
-        then return . Right $ ret
-        else return . Left $ err 
-                
-wrapGetInfo :: (CLsizei -> Ptr () -> Ptr CLsizei -> IO CLint) -> CLsizei -> IO (Either ErrorCode (ForeignPtr (), CLsizei))
-wrapGetInfo raw_infoFn param_size = alloca $ \value_size_ret -> do
-    param_data <- (mallocForeignPtrBytes . fromIntegral $ param_size) :: IO (ForeignPtr ())
-    ret <- wrapError $ withForeignPtr param_data $ \param_dataP -> raw_infoFn param_size param_dataP value_size_ret
-    if ret == Just clSuccess
-        then peek value_size_ret >>= \valsz -> return . Right $ (param_data,valsz)
-        else return . Left $ fromJust ret        
+wrapErrorPtr :: (Storable a, Integral a) => (Ptr a -> IO b) -> IO b
+wrapErrorPtr thunk = alloca $ \errorP -> do
+  ret <- thunk errorP
+  err <- (ErrorCode . fromIntegral) <$> peek errorP
+  if err == clSuccess
+    then return ret
+    else throw err
 
+fetchPtr :: (Storable a, Integral b) => (Ptr a -> IO b) -> IO a
+fetchPtr thunk = alloca $ \ptr -> do
+  err <- (ErrorCode . fromIntegral) <$> thunk ptr
+  if err == clSuccess
+    then peek ptr
+    else throw err
 
+wrapGetInfo :: (CLsizei -> Ptr () -> Ptr CLsizei -> IO CLint) -> CLsizei -> IO (ForeignPtr (), CLsizei)
+wrapGetInfo raw_infoFn param_size = do
+  param_data <- mallocForeignPtrBytes . fromIntegral $ param_size
+  valsz <- withForeignPtr param_data $ \param_dataP -> fetchPtr (raw_infoFn param_size param_dataP)
+  return (param_data, valsz) 
 
 nest :: [(r -> a) -> a] -> ([r] -> a) -> a
 nest xs = runCont (sequence (map cont xs))
