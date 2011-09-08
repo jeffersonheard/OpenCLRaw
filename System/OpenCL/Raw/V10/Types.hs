@@ -281,9 +281,9 @@ clProfilingCommandStart = ProfilingInfo 0x1282
 clProfilingCommandEnd  :: ProfilingInfo 
 clProfilingCommandEnd  = ProfilingInfo 0x1283
 
-
-clFalse = 0 :: CLbool
-clTrue = 1 :: CLbool
+clFalse, clTrue :: CLbool
+clFalse = 0
+clTrue = 1
 
 
 clDeviceTypeDefault :: DeviceType 
@@ -311,6 +311,7 @@ clContextDevices = ContextInfo 0x1081
 clContextProperties :: ContextInfo 
 clContextProperties = ContextInfo 0x1082
 
+clContextPlatform :: Integer
 clContextPlatform = 0x1084
 
 
@@ -573,6 +574,7 @@ clAddressClamp = AddressingMode 0x1132
 clAddressRepeat :: AddressingMode 
 clAddressRepeat = AddressingMode 0x1133
 
+clFilterNearest, clFilterLinear :: FilterMode
 clFilterNearest = FilterMode 0x1140
 clFilterLinear = FilterMode 0x1141
 

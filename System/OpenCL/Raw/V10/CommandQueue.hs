@@ -5,6 +5,7 @@
 module System.OpenCL.Raw.V10.CommandQueue 
     (clCreateCommandQueue
     ,clRetainCommandQueue
+    ,clReleaseCommandQueue
     ,clGetCommandQueueInfo
     ,clSetCommandQueueProperty)
 where
@@ -14,8 +15,6 @@ import System.OpenCL.Raw.V10.Errors
 import System.OpenCL.Raw.V10.Utils
 import Foreign
 import Control.Applicative
-import Data.Bits
-import Data.Maybe
 import Control.Exception ( throw )
 
 

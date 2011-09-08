@@ -11,7 +11,6 @@ module System.OpenCL.Raw.V10.ProgramObject
     ,clGetProgramBuildInfo)
 where
 
-import Control.Monad.Cont
 import System.OpenCL.Raw.V10.Types
 import System.OpenCL.Raw.V10.Errors
 import System.OpenCL.Raw.V10.Utils
@@ -83,5 +82,5 @@ clGetProgramInfo program (ProgramInfo param_name) param_value_size = wrapGetInfo
 
 foreign import ccall "clGetProgramBuildInfo"  raw_clGetProgramBuildInfo :: Program -> CLuint -> CLsizei -> Ptr () -> Ptr CLsizei -> IO CLint
 clGetProgramBuildInfo :: Program -> ProgramBuildInfo -> CLsizei -> IO (ForeignPtr (), CLsizei)
-clGetProgramBuildInfo program (ProgramBuildInfo param_name) param_value_size = wrapGetInfo (raw_clGetProgramInfo program param_name) param_value_size
+clGetProgramBuildInfo program (ProgramBuildInfo param_name) param_value_size = wrapGetInfo (raw_clGetProgramBuildInfo program param_name) param_value_size
 

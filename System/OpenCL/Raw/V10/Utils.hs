@@ -6,7 +6,6 @@ import Foreign.C
 import System.OpenCL.Raw.V10.Errors
 import System.OpenCL.Raw.V10.Types
 import Control.Applicative
-import Data.Maybe
 import Control.Monad.Cont
 import Control.Exception ( throw )
 

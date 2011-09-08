@@ -5,6 +5,7 @@ module System.OpenCL.Raw.V10.Kernel
     ,clCreateKernelsInProgram
     ,clRetainKernel
     ,clReleaseKernel
+    ,clSetKernelArg
     ,clGetKernelInfo
     ,clGetKernelWorkGroupInfo
     ,clEnqueueNDRangeKernel
@@ -18,11 +19,11 @@ import System.OpenCL.Raw.V10.Utils
 import Foreign
 import Foreign.C
 import Control.Applicative
-import Data.Maybe
 import Control.Exception ( throw )
 
 
 foreign import ccall "clCreateKernel" raw_clCreateKernel :: Program -> CString -> Ptr CLint -> IO Kernel 
+clCreateKernel :: Program -> CString -> IO Kernel
 clCreateKernel program kernel_name = wrapErrorPtr $ raw_clCreateKernel program kernel_name 
 
 foreign import ccall "clCreateKernelsInProgram" raw_clCreateKernelsInProgram :: Program -> CLuint -> Ptr Kernel -> Ptr CLuint -> IO CLint 
@@ -37,7 +38,7 @@ clRetainKernel kernel = wrapError $ raw_clRetainKernel kernel
 
 foreign import ccall "clReleaseKernel" raw_clReleaseKernel :: Kernel -> IO CLint 
 clReleaseKernel :: Kernel -> IO ()
-clReleaseKernel kernel = wrapError $ raw_clRetainKernel kernel
+clReleaseKernel kernel = wrapError $ raw_clReleaseKernel kernel
 
 foreign import ccall "clSetKernelArg" raw_clSetKernelArg :: Kernel -> CLuint -> CLsizei -> Ptr () -> IO CLint
 clSetKernelArg :: Kernel -> CLuint -> CLsizei -> Ptr () -> IO ()

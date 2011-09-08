@@ -8,12 +8,8 @@ module System.OpenCL.Raw.V10.Sampler
 where
 
 import System.OpenCL.Raw.V10.Types
-import System.OpenCL.Raw.V10.Errors
 import System.OpenCL.Raw.V10.Utils
 import Foreign
-import Foreign.C
-import Control.Applicative
-import Data.Maybe
 
 
 

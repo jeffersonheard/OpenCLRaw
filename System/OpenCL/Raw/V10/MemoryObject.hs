@@ -23,12 +23,8 @@ module System.OpenCL.Raw.V10.MemoryObject
 where
 
 import System.OpenCL.Raw.V10.Types
-import System.OpenCL.Raw.V10.Errors
 import System.OpenCL.Raw.V10.Utils
 import Foreign
-import Control.Applicative
-import Data.Maybe
-import Data.Bits
 
 
 foreign import ccall "clCreateBuffer" raw_clCreateBuffer :: Context -> CLbitfield -> CLsizei -> Ptr () -> Ptr CLint -> IO Mem
@@ -81,6 +77,7 @@ enqueue fn queue events = allocaArray events_in_wait_list $ \event_wait_list -> 
     
     
 foreign import ccall "clEnqueueReadBuffer" raw_clEnqueueReadBuffer :: CommandQueue -> Mem -> CLbool -> CLsizei -> CLsizei -> Ptr () -> CLuint -> Ptr Event -> Ptr Event -> IO CLint
+clEnqueueReadBuffer :: Mem -> Bool -> CLsizei -> CLsizei -> Ptr () -> CommandQueue -> [Event] -> IO Event
 clEnqueueReadBuffer buffer blocking_read offset cb ptr = 
     enqueue (\command_queue num_events_in_wait_list event_wait_list event -> 
                 raw_clEnqueueReadBuffer 
@@ -96,18 +93,21 @@ clEnqueueReadBuffer buffer blocking_read offset cb ptr =
                             
 
 foreign import ccall "clEnqueueWriteBuffer" raw_clEnqueueWriteBuffer :: CommandQueue -> Mem -> CLbool -> CLsizei -> CLsizei -> Ptr () -> CLuint -> Ptr Event -> Ptr Event -> IO CLint
+clEnqueueWriteBuffer :: Mem -> Bool -> CLsizei -> CLsizei -> Ptr () -> CommandQueue -> [Event] -> IO Event
 clEnqueueWriteBuffer buffer blocking_write offset cb ptr = 
     enqueue (\command_queue num_events_in_wait_list event_wait_list event -> 
                 raw_clEnqueueWriteBuffer command_queue buffer (if blocking_write then clTrue else clFalse) offset cb ptr num_events_in_wait_list event_wait_list event)  
 
 
 foreign import ccall "clEnqueueCopyBuffer" raw_clEnqueueCopyBuffer :: CommandQueue -> Mem -> Mem -> CLsizei -> CLsizei -> CLsizei -> CLuint -> Ptr Event -> Ptr Event -> IO CLint
+clEnqueueCopyBuffer :: Mem -> Mem -> CLsizei -> CLsizei -> CLsizei -> CommandQueue -> [Event] -> IO Event
 clEnqueueCopyBuffer src_buffer dst_buffer src_offset dst_offset cb = 
     enqueue (\command_queue num_events_in_wait_list event_wait_list event -> 
                 raw_clEnqueueCopyBuffer command_queue src_buffer dst_buffer src_offset dst_offset cb num_events_in_wait_list event_wait_list event)                       
 
 type ImageDims = (CLsizei,CLsizei,CLsizei)
 foreign import ccall "clEnqueueReadImage" raw_clEnqueueReadImage :: CommandQueue -> Mem -> CLbool -> Ptr CLsizei -> Ptr CLsizei -> CLsizei -> CLsizei -> Ptr () -> CLuint -> Ptr Event -> Ptr Event -> IO CLint
+clEnqueueReadImage :: Mem -> Bool -> (CLsizei, CLsizei, CLsizei) -> (CLsizei, CLsizei, CLsizei) -> CLsizei -> CLsizei -> Ptr () -> CommandQueue -> [Event] -> IO Event 
 clEnqueueReadImage image blocking_read (oa,ob,oc) (ra,rb,rc) row_pitch slice_pitch ptr = 
     enqueue (\command_queue num_events_in_wait_list event_wait_list event -> allocaArray 3 $ \origin -> allocaArray 3 $ \region -> do 
                 pokeArray region [ra,rb,rc]
@@ -115,6 +115,7 @@ clEnqueueReadImage image blocking_read (oa,ob,oc) (ra,rb,rc) row_pitch slice_pit
                 raw_clEnqueueReadImage command_queue image (if blocking_read then clTrue else clFalse) origin region row_pitch slice_pitch ptr num_events_in_wait_list event_wait_list event) 
                     
 foreign import ccall "clEnqueueWriteImage" raw_clEnqueueWriteImage :: CommandQueue -> Mem -> CLbool -> Ptr CLsizei -> Ptr CLsizei -> CLsizei -> CLsizei -> Ptr () -> CLuint -> Ptr Event -> Ptr Event -> IO CLint
+clEnqueueWriteImage :: Mem -> Bool -> (CLsizei, CLsizei, CLsizei) -> (CLsizei, CLsizei, CLsizei) -> CLsizei -> CLsizei -> Ptr () -> CommandQueue -> [Event] -> IO Event
 clEnqueueWriteImage image blocking_read (oa,ob,oc) (ra,rb,rc) row_pitch slice_pitch ptr = 
     enqueue (\command_queue num_events_in_wait_list event_wait_list event -> allocaArray 3 $ \origin -> allocaArray 3 $ \region -> do 
                 pokeArray region [ra,rb,rc]
@@ -216,6 +217,7 @@ clEnqueueMapImage buffer blocking_map (MapFlags map_flags) (oa,ob,oc) (ra,rb,rc)
                   
 
 foreign import ccall "clEnqueueUnmapMemObject" raw_clEnqueueUnmapMemObject :: CommandQueue -> Mem -> Ptr () -> CLuint -> Ptr Event -> Ptr Event -> IO CLint
+clEnqueueUnmapMemObject :: Mem -> Ptr () -> CommandQueue -> [Event] -> IO Event
 clEnqueueUnmapMemObject mem mapped_ptr = enqueue
     (\command_queue num_events_in_wait_list event_wait_list event -> 
         raw_clEnqueueUnmapMemObject command_queue mem mapped_ptr num_events_in_wait_list event_wait_list event)

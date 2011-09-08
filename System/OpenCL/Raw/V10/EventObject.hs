@@ -9,11 +9,8 @@ module System.OpenCL.Raw.V10.EventObject
 where 
 
 import System.OpenCL.Raw.V10.Types
-import System.OpenCL.Raw.V10.Errors
-import System.OpenCL.Raw.V10.Utils
 import System.OpenCL.Raw.V10.Utils
 import Foreign
-import Control.Applicative
 
 
 foreign import ccall "clWaitForEvents" raw_clWaitForEvents :: CLuint -> Ptr Event -> IO CLint

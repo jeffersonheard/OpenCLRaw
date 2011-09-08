@@ -10,7 +10,6 @@ import System.OpenCL.Raw.V10.Errors
 import System.OpenCL.Raw.V10.Utils
 import Foreign
 import Control.Applicative
-import Data.Bits
 import Control.Exception ( throw )
 
 

@@ -11,7 +11,6 @@ import System.OpenCL.Raw.V10.Utils
 import Foreign
 import Foreign.C
 import Control.Applicative
-import Data.Maybe
 import Control.Exception ( throw )
 
 
