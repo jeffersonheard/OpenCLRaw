@@ -6,7 +6,6 @@ license: BSD3
 license-file: LICENSE
 copyright: Renaissance Computing Institute
 maintainer: J.R. Heard
-build-depends: base < 5, bytestring -any, mtl -any
 stability: Experimental
 homepage: http://vis.renci.org/jeff/opencl
 package-url:
@@ -31,41 +30,43 @@ data-files:
 data-dir: ""
 extra-source-files: 
 extra-tmp-files:
-exposed-modules: System.OpenCL.Raw.V10.CommandQueue
-                 System.OpenCL.Raw.V10.Context
-                 System.OpenCL.Raw.V10.DeviceInfo
-                 System.OpenCL.Raw.V10.Errors
-                 System.OpenCL.Raw.V10.Etc
-                 System.OpenCL.Raw.V10.EventObject
-                 System.OpenCL.Raw.V10.FlushFinish
-                 System.OpenCL.Raw.V10.Kernel
-                 System.OpenCL.Raw.V10.MemoryObject
-                 System.OpenCL.Raw.V10.OutOfOrder
-                 System.OpenCL.Raw.V10.PlatformInfo
-                 System.OpenCL.Raw.V10.ProgramObject
-                 System.OpenCL.Raw.V10.Sampler
-                 System.OpenCL.Raw.V10.Types
-                 System.OpenCL.Raw.V10
-exposed: True
-buildable: True
-build-tools:
-cpp-options:
-cc-options:
-ld-options:
-pkgconfig-depends:
-frameworks:
-c-sources:
-extensions:
-extra-libraries:
-extra-lib-dirs:
-includes:
-install-includes:
-include-dirs:
-hs-source-dirs: .
-other-modules: System.OpenCL.Raw.V10.Utils
-ghc-prof-options:
-ghc-shared-options:
-ghc-options:
-hugs-options:
-nhc98-options:
-jhc-options:
+library
+  build-depends: base < 5, bytestring -any, mtl -any
+  exposed-modules: System.OpenCL.Raw.V10.CommandQueue
+                   System.OpenCL.Raw.V10.Context
+                   System.OpenCL.Raw.V10.DeviceInfo
+                   System.OpenCL.Raw.V10.Errors
+                   System.OpenCL.Raw.V10.Etc
+                   System.OpenCL.Raw.V10.EventObject
+                   System.OpenCL.Raw.V10.FlushFinish
+                   System.OpenCL.Raw.V10.Kernel
+                   System.OpenCL.Raw.V10.MemoryObject
+                   System.OpenCL.Raw.V10.OutOfOrder
+                   System.OpenCL.Raw.V10.PlatformInfo
+                   System.OpenCL.Raw.V10.ProgramObject
+                   System.OpenCL.Raw.V10.Sampler
+                   System.OpenCL.Raw.V10.Types
+                   System.OpenCL.Raw.V10
+  exposed: True
+  buildable: True
+  build-tools:
+  cpp-options:
+  cc-options:
+  ld-options:
+  pkgconfig-depends:
+  frameworks:
+  c-sources:
+  extensions:
+  extra-libraries:
+  extra-lib-dirs:
+  includes:
+  install-includes:
+  include-dirs:
+  hs-source-dirs: .
+  other-modules: System.OpenCL.Raw.V10.Utils
+  ghc-prof-options:
+  ghc-shared-options:
+  ghc-options: -Wall
+  hugs-options:
+  nhc98-options:
+  jhc-options:
