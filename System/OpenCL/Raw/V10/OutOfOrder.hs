@@ -7,22 +7,15 @@ module System.OpenCL.Raw.V10.OutOfOrder
 where 
 
 import System.OpenCL.Raw.V10.Types
-import System.OpenCL.Raw.V10.Errors
 import System.OpenCL.Raw.V10.Utils
 import Foreign
-import Control.Applicative
-import Data.Maybe
 
 foreign import ccall "clEnqueueMarker" raw_clEnqueueMarker :: CommandQueue -> Ptr Event -> IO CLint 
-clEnqueueMarker :: CommandQueue -> IO (Either ErrorCode Event)
-clEnqueueMarker queue = alloca $ \eventP -> do
-    err <- wrapError $ raw_clEnqueueMarker queue eventP
-    if err == Nothing 
-        then Right <$> peek eventP
-        else return $ Left . fromJust $  err
+clEnqueueMarker :: CommandQueue -> IO Event
+clEnqueueMarker queue = fetchPtr $ raw_clEnqueueMarker queue
     
 foreign import ccall "clEnqueueWaitForEvents" raw_clEnqueueWaitForEvents :: CommandQueue -> CLuint -> Ptr Event -> IO CLint
-clEnqueueWaitForEvents :: CommandQueue -> [Event] -> IO (Maybe ErrorCode)
+clEnqueueWaitForEvents :: CommandQueue -> [Event] -> IO ()
 clEnqueueWaitForEvents queue events = 
     allocaArray num_events $ \eventsP -> do
         pokeArray eventsP events
@@ -30,7 +23,7 @@ clEnqueueWaitForEvents queue events =
     where num_events = length events
 
 foreign import ccall "clEnqueueBarrier" raw_clEnqueueBarrier :: CommandQueue -> IO CLint 
-clEnqueueBarrier :: CommandQueue -> IO (Maybe ErrorCode) 
+clEnqueueBarrier :: CommandQueue -> IO () 
 clEnqueueBarrier queue = wrapError $ raw_clEnqueueBarrier queue
 
 

@@ -1,8 +1,11 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {-| Declaration of types, bounds and constants for OpenCL 1.0 -}
 module System.OpenCL.Raw.V10.Types where
 
 import Foreign.C.Types
 import Foreign
+import Control.Exception
+import Data.Typeable
 
 data PlatformIDc = PlatformIDc
 data DeviceIDc = DeviceIDc
@@ -42,7 +45,8 @@ newtype DeviceType = DeviceType CLbitfield
 newtype ContextInfo = ContextInfo CLuint
 newtype CommandQueueProperties = CommandQueueProperties CLbitfield
 newtype CommandQueueInfo = CommandQueueInfo CLuint
-newtype ErrorCode = ErrorCode CLint deriving (Eq,Ord,Show,Read)
+newtype ErrorCode = ErrorCode CLint deriving (Eq,Ord,Show,Read,Typeable)
+instance Exception ErrorCode
 newtype EventInfo = EventInfo CLuint
 newtype ProfilingInfo = ProfilingInfo CLuint
 newtype KernelInfo = KernelInfo CLuint
@@ -277,9 +281,9 @@ clProfilingCommandStart = ProfilingInfo 0x1282
 clProfilingCommandEnd  :: ProfilingInfo 
 clProfilingCommandEnd  = ProfilingInfo 0x1283
 
-
-clFalse = 0 :: CLbool
-clTrue = 1 :: CLbool
+clFalse, clTrue :: CLbool
+clFalse = 0
+clTrue = 1
 
 
 clDeviceTypeDefault :: DeviceType 
@@ -307,6 +311,7 @@ clContextDevices = ContextInfo 0x1081
 clContextProperties :: ContextInfo 
 clContextProperties = ContextInfo 0x1082
 
+clContextPlatform :: Integer
 clContextPlatform = 0x1084
 
 
@@ -569,6 +574,7 @@ clAddressClamp = AddressingMode 0x1132
 clAddressRepeat :: AddressingMode 
 clAddressRepeat = AddressingMode 0x1133
 
+clFilterNearest, clFilterLinear :: FilterMode
 clFilterNearest = FilterMode 0x1140
 clFilterLinear = FilterMode 0x1141
 

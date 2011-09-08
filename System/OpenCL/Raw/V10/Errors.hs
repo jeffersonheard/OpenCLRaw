@@ -116,26 +116,26 @@ clInvalidWorkDimension = ErrorCode (-53)
 
 clInvalidWorkGroupSize :: ErrorCode
 clInvalidWorkGroupSize = ErrorCode (-54)
+
 clInvalidWorkItemSize :: ErrorCode
-
 clInvalidWorkItemSize = ErrorCode (-55)
+
 clInvalidGlobalOffset :: ErrorCode
-
 clInvalidGlobalOffset = ErrorCode (-56)
+
 clInvalidEventWaitList :: ErrorCode
-
 clInvalidEventWaitList = ErrorCode (-57)
+
 clInvalidEvent :: ErrorCode
-
 clInvalidEvent = ErrorCode (-58)
+
 clInvalidOperation :: ErrorCode
-
 clInvalidOperation = ErrorCode (-59)
+
 clInvalidGLObject :: ErrorCode
-
 clInvalidGLObject = ErrorCode (-60)
-clInvalidBufferSize :: ErrorCode
 
+clInvalidBufferSize, clInvalidMipLevel :: ErrorCode
 clInvalidBufferSize = ErrorCode (-61)
 clInvalidMipLevel = ErrorCode (-62)
 
