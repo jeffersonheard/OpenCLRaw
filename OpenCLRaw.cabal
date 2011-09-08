@@ -6,7 +6,7 @@ license: BSD3
 license-file: LICENSE
 copyright: Renaissance Computing Institute
 maintainer: J.R. Heard
-build-depends: base <= 4.1.0.0, bytestring -any, mtl -any
+build-depends: base < 5, bytestring -any, mtl -any
 stability: Experimental
 homepage: http://vis.renci.org/jeff/opencl
 package-url:
